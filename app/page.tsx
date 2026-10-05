@@ -253,6 +253,14 @@ export default function Home() {
           >
             Download my CV <Download />
           </a>
+          <a
+            className="button button-outline"
+            href="https://www.linkedin.com/in/cstshally-okeke/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Connect on LinkedIn <Arrow diagonal />
+          </a>
         </div>
       </section>
       <Footer />

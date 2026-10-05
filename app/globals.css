@@ -809,6 +809,8 @@ section[id] {
 }
 .contact-bottom {
   display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
   justify-content: space-between;
   align-items: center;
 }
