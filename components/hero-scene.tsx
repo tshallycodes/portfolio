@@ -37,7 +37,7 @@ export function HeroScene() {
         scene.add(object);
         const geometry = new THREE.TorusKnotGeometry(1.16, 0.4, 160, 28, 2, 3);
         const material = new THREE.MeshPhysicalMaterial({
-          color: 0x4263fc,
+          color: 0xff790b,
           metalness: 0.52,
           roughness: 0.22,
           clearcoat: 1,
@@ -46,7 +46,7 @@ export function HeroScene() {
         object.add(new THREE.Mesh(geometry, material));
         const wireGeometry = new THREE.IcosahedronGeometry(2.16, 1);
         const wireMaterial = new THREE.MeshBasicMaterial({
-          color: 0x2d48c7,
+          color: 0xc6530c,
           wireframe: true,
           transparent: true,
           opacity: 0.13,
@@ -55,7 +55,7 @@ export function HeroScene() {
         object.add(wire);
         const ringGeometry = new THREE.TorusGeometry(2.4, 0.008, 8, 100);
         const ringMaterial = new THREE.MeshBasicMaterial({
-          color: 0x617ada,
+          color: 0xe98840,
           transparent: true,
           opacity: 0.35,
         });
@@ -76,18 +76,18 @@ export function HeroScene() {
           new THREE.BufferAttribute(positions, 3),
         );
         const pointMaterial = new THREE.PointsMaterial({
-          color: 0x4664d1,
+          color: 0xd36d24,
           size: 0.022,
           transparent: true,
           opacity: 0.55,
         });
         const points = new THREE.Points(pointGeometry, pointMaterial);
         scene.add(points);
-        scene.add(new THREE.HemisphereLight(0xe6f1ff, 0x133ac7, 3));
+        scene.add(new THREE.HemisphereLight(0xffead3, 0xa43c05, 3));
         const key = new THREE.DirectionalLight(0xffffff, 6);
         key.position.set(-3, 4, 5);
         scene.add(key);
-        const fill = new THREE.DirectionalLight(0xadc7ff, 4);
+        const fill = new THREE.DirectionalLight(0xffc38a, 4);
         fill.position.set(4, -2, 2);
         scene.add(fill);
         const rim = new THREE.DirectionalLight(0xffffff, 5);
@@ -108,9 +108,10 @@ export function HeroScene() {
         ro.observe(mount);
         resize();
         const move = (e: PointerEvent) => {
+          if (!motion || e.pointerType === "touch") return;
           const box = mount.getBoundingClientRect();
-          pointerX = ((e.clientX - box.left) / box.width - 0.5) * 0.65;
-          pointerY = ((e.clientY - box.top) / box.height - 0.5) * 0.45;
+          pointerX = ((e.clientX - box.left) / box.width - 0.5) * 1.5;
+          pointerY = ((e.clientY - box.top) / box.height - 0.5) * 1.1;
         };
         mount.addEventListener("pointermove", move, { passive: true });
         const reset = () => {
@@ -132,9 +133,16 @@ export function HeroScene() {
           if (disposed) return;
           if (active && visible && motion) {
             object.rotation.y +=
-              (pointerX + time * 0.000075 - object.rotation.y) * 0.025;
+              (pointerX + time * 0.000075 - object.rotation.y) * 0.075;
             object.rotation.x += (0.3 + pointerY - object.rotation.x) * 0.035;
-            object.position.y = Math.sin(time * 0.0006) * 0.09;
+            object.position.x += (pointerX * 0.8 - object.position.x) * 0.075;
+            object.position.y +=
+              (-pointerY * 0.75 +
+                Math.sin(time * 0.0006) * 0.09 -
+                object.position.y) *
+              0.075;
+            object.rotation.z +=
+              (-0.24 - pointerX * 0.2 - object.rotation.z) * 0.06;
             wire.rotation.y = -time * 0.00009;
             ring.rotation.z = time * 0.00012;
             points.rotation.z = time * 0.000025;
@@ -174,7 +182,7 @@ export function HeroScene() {
       <div
         ref={host}
         className="webgl-host"
-        aria-label="An abstract blue 3D knot representing connected ideas"
+        aria-label="An abstract orange 3D knot representing connected ideas"
         role="img"
       />
       <div
@@ -188,7 +196,7 @@ export function HeroScene() {
       <div className="scene-caption">
         <span>Ideas are better connected.</span>
         <span>
-          {motion ? "Move your pointer to explore" : "A moment of stillness"}
+          {motion ? "Hover and move to play" : "A moment of stillness"}
         </span>
       </div>
     </div>

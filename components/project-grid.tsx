@@ -4,6 +4,26 @@ import Link from "next/link";
 import Image from "next/image";
 import type { Project } from "@/lib/projects";
 import { Arrow } from "./icons";
+export function AgentDiagram({ project }: { project: Project }) {
+  return (
+    <div
+      className="agent-diagram"
+      role="img"
+      aria-label={`Illustrative workflow: ${project.flow?.join(" to ")}`}
+    >
+      <strong>{project.title}</strong>
+      <div className="agent-flow">
+        {project.flow?.map((step, i) => (
+          <span key={step}>
+            {i > 0 ? "→ " : ""}
+            {step}
+          </span>
+        ))}
+      </div>
+      <small>Illustrative workflow · {project.tags.join(" / ")}</small>
+    </div>
+  );
+}
 export function Pipeline({ compact = false }: { compact?: boolean }) {
   return (
     <div
@@ -101,6 +121,8 @@ export function ProjectGrid({ projects }: { projects: Project[] }) {
                     sizes="(max-width: 700px) 100vw, 48vw"
                   />
                 </div>
+              ) : project.flow ? (
+                <AgentDiagram project={project} />
               ) : project.slug === "iot" ? (
                 <TrafficVisualization />
               ) : (

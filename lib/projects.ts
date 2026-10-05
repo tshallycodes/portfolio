@@ -1,4 +1,5 @@
 export type Project = {
+  flow?: string[];
   slug: string;
   title: string;
   subtitle: string;
@@ -21,6 +22,91 @@ export type Project = {
   extraImage?: string;
 };
 export const projects: Project[] = [
+  {
+    slug: "web-search-agent",
+    title: "Ask. Search. Connect.",
+    subtitle: "An agent that brings the web into the conversation.",
+    description:
+      "A local AI agent combining live web search with Ollama reasoning in an interactive terminal.",
+    tags: ["Python", "LangChain", "Ollama", "DuckDuckGo"],
+    color: "peach",
+    problem:
+      "Questions often need information beyond a model�s training data. This project connects live search to a local language model.",
+    contribution: [
+      "The public repository documents a continuous question-and-answer loop.",
+      "DuckDuckGo retrieves web results for the agent.",
+      "Ollama processes the retrieved context through a LangChain workflow.",
+    ],
+    approach:
+      "A terminal question triggers web search, the results become model context, and the agent returns an answer before accepting the next question.",
+    outcome:
+      "A compact example of tool-using AI: retrieval and local inference connected through an interactive workflow.",
+    limits:
+      "Answers require source checking. Local inference does not make web searches offline or private; search queries still reach the search provider. No independent answer-quality benchmark is reported.",
+    github: "https://github.com/tshallycodes/WebSearchAIAgent",
+    flow: ["Question", "Web search", "Local reasoning"],
+    category: "AI & interaction",
+    year: "2026",
+    role: "Public repository project",
+    caption: "Illustrative workflow based on public repository documentation.",
+  },
+  {
+    slug: "ollama-chat",
+    title: "A conversation, locally.",
+    subtitle: "Bringing a local language model into the browser.",
+    description:
+      "A Streamlit chatbot with Ollama models and session conversation history.",
+    tags: ["Python", "Ollama", "Streamlit"],
+    color: "sage",
+    problem:
+      "Exploring generative AI can start with a model running on your own machine and a simple interface for conversation.",
+    contribution: [
+      "The repository connects a Streamlit interface to Ollama.",
+      "Users can choose among downloaded local models.",
+      "Conversation history is maintained during the session.",
+    ],
+    approach:
+      "Streamlit handles the chat interface and session state while Ollama runs the selected model locally.",
+    outcome:
+      "A browser-based local chatbot that can run without cloud inference once its models are downloaded.",
+    limits:
+      "This is a conversational application rather than an autonomous tool-using agent. Response quality and speed depend on the chosen model and hardware; generated answers can be incorrect.",
+    github: "https://github.com/tshallycodes/ollama-chat",
+    flow: ["Conversation", "Session history", "Ollama"],
+    category: "AI & interaction",
+    year: "2026",
+    role: "Public repository project",
+    caption: "Illustrative workflow based on public repository documentation.",
+  },
+  {
+    slug: "var-sentiment",
+    title: "Beyond the final whistle",
+    subtitle: "Understanding how football fans talk about VAR.",
+    category: "Machine learning",
+    year: "2025",
+    description:
+      "An NLP project exploring sentiment around VAR decisions across football leagues.",
+    tags: ["Python", "NLTK", "scikit-learn", "pandas"],
+    color: "peach",
+    role: "Public repository project",
+    problem:
+      "VAR decisions generate strong reactions. This project explores how sentiment in public football discussion varies between leagues.",
+    contribution: [
+      "The repository documents preprocessing public football discussion for sentiment analysis.",
+      "It classifies sentiment as positive, neutral or negative.",
+      "Published visualisations compare sentiment distributions and average scores across leagues.",
+    ],
+    approach:
+      "A notebook workflow combines text preprocessing, sentiment classification and visualisation to compare discussion of VAR across the Premier League, La Liga, Serie A and Bundesliga.",
+    outcome:
+      "The public README includes a confusion matrix and league-level sentiment plots, connecting NLP modelling to a question about fan perception.",
+    limits:
+      "Online discussion is not a representative survey of all fans. Results depend on collection and labelling choices; the published findings have not been independently reproduced. Individual team contributions have not been confirmed.",
+    github: "https://github.com/tshallycodes/VAR-Sentiment-Analysis",
+    caption:
+      "Illustrative workflow based on the public repository documentation.",
+    flow: ["Fan discussion", "Sentiment analysis", "League comparison"],
+  },
   {
     slug: "iot",
     title: "Finding the outliers",

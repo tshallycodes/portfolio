@@ -2,7 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { projects } from "@/lib/projects";
-import { Pipeline, TrafficVisualization } from "@/components/project-grid";
+import {
+  AgentDiagram,
+  Pipeline,
+  TrafficVisualization,
+} from "@/components/project-grid";
 import { Arrow } from "@/components/icons";
 import { Footer } from "@/components/footer";
 export function generateStaticParams() {
@@ -89,6 +93,8 @@ export default async function ProjectPage({
             priority
             sizes="(max-width: 900px) 100vw, 85vw"
           />
+        ) : project.flow ? (
+          <AgentDiagram project={project} />
         ) : project.slug === "iot" ? (
           <TrafficVisualization />
         ) : (

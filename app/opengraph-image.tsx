@@ -6,8 +6,8 @@ export default function Image() {
   return new ImageResponse(
     <div
       style={{
-        background: "#eaf0ff",
-        color: "#2346b4",
+        background: "#fff0e3",
+        color: "#ad3e08",
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
