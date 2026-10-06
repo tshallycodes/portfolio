@@ -1,3 +1,7 @@
+import { SkillsEvidence } from "@/components/skills-evidence";
+import { AgentExplorer } from "@/components/agent-explorer";
+import { SectionDock } from "@/components/section-dock";
+import { CopyEmail } from "@/components/copy-email";
 import { projects } from "@/lib/projects";
 import { HeroScene } from "@/components/hero-scene";
 import { ProjectGrid } from "@/components/project-grid";
@@ -6,6 +10,7 @@ import { Footer } from "@/components/footer";
 export default function Home() {
   return (
     <main id="main">
+      <SectionDock />
       <section className="hero" aria-labelledby="hero-title">
         <div className="hero-top">
           <p>
@@ -73,6 +78,28 @@ export default function Home() {
               a prediction, how a model becomes an application, and how an idea
               becomes something people can use.
             </p>
+            <aside className="recruiter-brief" aria-label="Recruiter summary">
+              <dl>
+                <div>
+                  <dt>Looking towards</dt>
+                  <dd>
+                    AI engineering, ML engineering, data science &amp; data
+                    analysis
+                  </dd>
+                </div>
+                <div>
+                  <dt>Education</dt>
+                  <dd>BSc (Hons) Applied AI · University of Bradford</dd>
+                </div>
+                <div>
+                  <dt>Graduation</dt>
+                  <dd>July 2027</dd>
+                </div>
+              </dl>
+              <a href="/chukwuebuka-tshally-okeke-cv.pdf" download>
+                Download my CV <Download />
+              </a>
+            </aside>
             <p className="intro-signoff">
               Still curious. Just building better questions.
             </p>
@@ -94,6 +121,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <AgentExplorer />
       <section className="work section-wrap" id="work">
         <div className="section-heading">
           <div>
@@ -160,6 +188,7 @@ export default function Home() {
           </article>
         </div>
       </section>
+      <SkillsEvidence />
       <section className="experience section-wrap" id="experience">
         <div className="section-heading">
           <div>
@@ -261,6 +290,7 @@ export default function Home() {
           >
             Connect on LinkedIn <Arrow diagonal />
           </a>
+          <CopyEmail />
         </div>
       </section>
       <Footer />

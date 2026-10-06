@@ -1,9 +1,12 @@
 "use client";
+import { AnimatePresence, motion } from "motion/react";
+import { useMotion } from "./motion";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import type { Project } from "@/lib/projects";
 import { Arrow } from "./icons";
+const AnimatedLink = motion.create(Link);
 export function AgentDiagram({ project }: { project: Project }) {
   return (
     <div
@@ -55,6 +58,7 @@ export function Pipeline({ compact = false }: { compact?: boolean }) {
   );
 }
 export function ProjectGrid({ projects }: { projects: Project[] }) {
+  const { motion: enabled } = useMotion();
   const [filter, setFilter] = useState("All work");
   const categories = [
     "All work",
@@ -104,47 +108,54 @@ export function ProjectGrid({ projects }: { projects: Project[] }) {
         <span aria-live="polite">{visible.length} projects</span>
       </div>
       <div className="project-grid">
-        {visible.map((project) => (
-          <Link
-            href={`/work/${project.slug}`}
-            className={`project-card ${project.color}`}
-            key={project.slug}
-          >
-            <div className="project-visual">
-              {project.image ? (
-                <div className={`project-image ${project.slug}`}>
-                  <Image
-                    src={project.image}
-                    alt={project.caption || project.title}
-                    width={1440}
-                    height={1000}
-                    sizes="(max-width: 700px) 100vw, 48vw"
-                  />
-                </div>
-              ) : project.flow ? (
-                <AgentDiagram project={project} />
-              ) : project.slug === "iot" ? (
-                <TrafficVisualization />
-              ) : (
-                <Pipeline compact />
-              )}
-              <span className="project-open" aria-hidden="true">
-                <Arrow diagonal />
-              </span>
-            </div>
-            <div className="project-meta">
-              <span>{project.category}</span>
-              <span>{project.year}</span>
-            </div>
-            <h3>{project.title}</h3>
-            <p>{project.description}</p>
-            <div className="project-tags">
-              {project.tags.map((tag) => (
-                <span key={tag}>{tag}</span>
-              ))}
-            </div>
-          </Link>
-        ))}
+        <AnimatePresence initial={false}>
+          {visible.map((project) => (
+            <AnimatedLink
+              layout={enabled}
+              initial={enabled ? { opacity: 0, y: 12 } : false}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, scale: enabled ? 0.96 : 1 }}
+              transition={{ duration: enabled ? 0.25 : 0 }}
+              href={`/work/${project.slug}`}
+              className={`project-card ${project.color}`}
+              key={project.slug}
+            >
+              <div className="project-visual">
+                {project.image ? (
+                  <div className={`project-image ${project.slug}`}>
+                    <Image
+                      src={project.image}
+                      alt={project.caption || project.title}
+                      width={1440}
+                      height={1000}
+                      sizes="(max-width: 700px) 100vw, 48vw"
+                    />
+                  </div>
+                ) : project.flow ? (
+                  <AgentDiagram project={project} />
+                ) : project.slug === "iot" ? (
+                  <TrafficVisualization />
+                ) : (
+                  <Pipeline compact />
+                )}
+                <span className="project-open" aria-hidden="true">
+                  <Arrow diagonal />
+                </span>
+              </div>
+              <div className="project-meta">
+                <span>{project.category}</span>
+                <span>{project.year}</span>
+              </div>
+              <h3>{project.title}</h3>
+              <p>{project.description}</p>
+              <div className="project-tags">
+                {project.tags.map((tag) => (
+                  <span key={tag}>{tag}</span>
+                ))}
+              </div>
+            </AnimatedLink>
+          ))}
+        </AnimatePresence>
       </div>
     </>
   );

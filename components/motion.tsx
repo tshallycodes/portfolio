@@ -1,4 +1,5 @@
 "use client";
+import { MotionConfig } from "motion/react";
 import { usePathname } from "next/navigation";
 import {
   createContext,
@@ -16,10 +17,13 @@ export function MotionProvider({ children }: { children: React.ReactNode }) {
   const cursor = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const update = () =>
-      setMotion(
-        !media.matches && localStorage.getItem("tshally-motion") !== "off",
-      );
+    const update = () => {
+      let stored = "on";
+      try {
+        stored = localStorage.getItem("tshally-motion") || "on";
+      } catch {}
+      setMotion(!media.matches && stored !== "off");
+    };
     update();
     media.addEventListener("change", update);
     return () => media.removeEventListener("change", update);
@@ -27,7 +31,9 @@ export function MotionProvider({ children }: { children: React.ReactNode }) {
   const toggleMotion = useCallback(
     () =>
       setMotion((current) => {
-        localStorage.setItem("tshally-motion", current ? "off" : "on");
+        try {
+          localStorage.setItem("tshally-motion", current ? "off" : "on");
+        } catch {}
         return !current;
       }),
     [],
@@ -70,20 +76,18 @@ export function MotionProvider({ children }: { children: React.ReactNode }) {
             duration: 1.8,
             ease: "power2.out",
           });
-          gsap.utils
-            .toArray<HTMLElement>(".journey-line")
-            .forEach((line) =>
-              gsap.from(line, {
-                scaleX: 0,
-                transformOrigin: "left",
-                scrollTrigger: {
-                  trigger: line,
-                  start: "top 85%",
-                  end: "top 55%",
-                  scrub: 1,
-                },
-              }),
-            );
+          gsap.utils.toArray<HTMLElement>(".journey-line").forEach((line) =>
+            gsap.from(line, {
+              scaleX: 0,
+              transformOrigin: "left",
+              scrollTrigger: {
+                trigger: line,
+                start: "top 85%",
+                end: "top 55%",
+                scrub: 1,
+              },
+            }),
+          );
         });
         cleanup = () => mm.revert();
       },
@@ -97,7 +101,9 @@ export function MotionProvider({ children }: { children: React.ReactNode }) {
   }, [motion, pathname]);
   return (
     <MotionContext.Provider value={{ motion, toggleMotion }}>
-      {children}
+      <MotionConfig reducedMotion={motion ? "user" : "always"}>
+        {children}
+      </MotionConfig>
       <div ref={cursor} className="custom-cursor" aria-hidden="true" />
     </MotionContext.Provider>
   );

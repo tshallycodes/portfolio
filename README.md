@@ -30,3 +30,11 @@ The site respects reduced-motion preferences and includes a manual motion toggle
 Repository: https://github.com/tshallycodes/portfolio
 Preferred production address: https://tshally.vercel.app
 Deploy a preview first; promote the reviewed site to production to claim the preferred address if available.
+
+## Interactive components
+
+- `components/agent-explorer.tsx` is a labelled, local project walkthrough. It does not call a model or fabricate live outputs.
+- `components/section-dock.tsx` provides section links and page progress using native scrolling.
+- `components/skills-evidence.tsx` maps skills to existing public case studies with keyboard-accessible disclosure controls.
+- `components/copy-email.tsx` copies the public recruiter email, with visible success or fallback feedback.
+- Motion handles user-triggered filtering and walkthrough transitions. The existing GSAP hero animation remains; motion preferences apply to both.
