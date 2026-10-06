@@ -5,6 +5,16 @@ import { useMotion } from "./motion";
 
 const nodes = [
   {
+    id: "python-toolkit",
+    label: "Python",
+    kind: "skill",
+    x: 22,
+    y: 18,
+    detail:
+      "A tool for exploring data, evaluating models and building AI workflows.",
+    href: "#approach",
+  },
+  {
     id: "tshally",
     label: "Tshally",
     kind: "core",
@@ -108,8 +118,199 @@ const nodes = [
     detail: "My base in the United Kingdom, while studying at Bradford.",
     href: "#about",
   },
+  {
+    id: "ml",
+    label: "Machine learning",
+    kind: "skill",
+    x: 12,
+    y: 40,
+    detail: "Training models, comparing predictions and investigating errors.",
+    href: "#approach",
+  },
+  {
+    id: "data-science",
+    label: "Data science",
+    kind: "skill",
+    x: 53,
+    y: 12,
+    detail: "Turning questions and data into useful experiments and analysis.",
+    href: "#approach",
+  },
+  {
+    id: "sql",
+    label: "SQL",
+    kind: "skill",
+    x: 83,
+    y: 25,
+    detail: "Working with structured data to answer practical questions.",
+    href: "#approach",
+  },
+  {
+    id: "pytorch",
+    label: "PyTorch",
+    kind: "skill",
+    x: 87,
+    y: 50,
+    detail: "Exploring neural models in university machine learning projects.",
+    href: "#approach",
+  },
+  {
+    id: "sklearn",
+    label: "scikit-learn",
+    kind: "skill",
+    x: 78,
+    y: 78,
+    detail: "Feature engineering, classifiers and model evaluation.",
+    href: "#approach",
+  },
+  {
+    id: "streamlit",
+    label: "Streamlit",
+    kind: "skill",
+    x: 48,
+    y: 89,
+    detail:
+      "Making model outputs accessible through an interactive application.",
+    href: "#approach",
+  },
+  {
+    id: "langchain",
+    label: "LangChain",
+    kind: "skill",
+    x: 18,
+    y: 80,
+    detail: "Connecting a local language model to web-search tools.",
+    href: "#approach",
+  },
+  {
+    id: "ollama",
+    label: "Ollama",
+    kind: "skill",
+    x: 12,
+    y: 61,
+    detail: "Running language models locally for agents and conversation.",
+    href: "#approach",
+  },
+  {
+    id: "docker",
+    label: "Docker",
+    kind: "skill",
+    x: 46,
+    y: 71,
+    detail: "Packaging the services in the Voyage prediction pipeline.",
+    href: "#approach",
+  },
+  {
+    id: "web-search",
+    label: "Web search",
+    kind: "work",
+    x: 22,
+    y: 18,
+    detail:
+      "Explore the public Web search project, its approach, outcomes and limitations.",
+    href: "/work/web-search-agent",
+  },
+  {
+    id: "repo-report",
+    label: "Repo analyser",
+    kind: "work",
+    x: 12,
+    y: 40,
+    detail:
+      "Explore the public Repo analyser project, its approach, outcomes and limitations.",
+    href: "/work/repo-analyser",
+  },
+  {
+    id: "local-chat",
+    label: "Local chat",
+    kind: "work",
+    x: 53,
+    y: 12,
+    detail:
+      "Explore the public Local chat project, its approach, outcomes and limitations.",
+    href: "/work/ollama-chat",
+  },
+  {
+    id: "var",
+    label: "VAR sentiment",
+    kind: "work",
+    x: 83,
+    y: 25,
+    detail:
+      "Explore the public VAR sentiment project, its approach, outcomes and limitations.",
+    href: "/work/var-sentiment",
+  },
+  {
+    id: "iot-security",
+    label: "IoT security",
+    kind: "work",
+    x: 87,
+    y: 50,
+    detail:
+      "Explore the public IoT security project, its approach, outcomes and limitations.",
+    href: "/work/iot",
+  },
+  {
+    id: "parkinsons",
+    label: "Parkinson’s",
+    kind: "work",
+    x: 78,
+    y: 78,
+    detail:
+      "Explore the public Parkinson’s project, its approach, outcomes and limitations.",
+    href: "/work/updrs",
+  },
+  {
+    id: "voyage",
+    label: "Voyage",
+    kind: "work",
+    x: 48,
+    y: 89,
+    detail:
+      "Explore the public Voyage project, its approach, outcomes and limitations.",
+    href: "/work/voyage",
+  },
 ];
-const edges = nodes
+const worldIds = [
+  "tshally",
+  "curiosity",
+  "nigeria",
+  "bradford",
+  "ai",
+  "agents",
+  "python",
+  "projects",
+  "github",
+  "linkedin",
+  "oldham",
+];
+const toolkitIds = [
+  "tshally",
+  "python-toolkit",
+  "ml",
+  "data-science",
+  "sql",
+  "pytorch",
+  "sklearn",
+  "streamlit",
+  "langchain",
+  "ollama",
+  "docker",
+];
+const projectIds = [
+  "tshally",
+  "web-search",
+  "repo-report",
+  "local-chat",
+  "var",
+  "iot-security",
+  "parkinsons",
+  "voyage",
+  "github",
+  "linkedin",
+];
+const worldEdges = nodes
+  .filter((node) => worldIds.includes(node.id))
   .slice(1)
   .map((node) => ["tshally", node.id])
   .concat([
@@ -129,6 +330,20 @@ const initialPositions = Object.fromEntries(
 
 export function HeroScene() {
   const { motion: enabled } = useMotion();
+  const [view, setView] = useState("world");
+  const visibleIds =
+    view === "toolkit"
+      ? toolkitIds
+      : view === "projects"
+        ? projectIds
+        : worldIds;
+  const visibleNodes = visibleIds.map((id) =>
+    nodes.find((node) => node.id === id)!,
+  );
+  const edges =
+    view === "world"
+      ? worldEdges
+      : visibleIds.slice(1).map((id) => ["tshally", id]);
   const [positions, setPositions] = useState(initialPositions);
   const [selected, setSelected] = useState("tshally");
   const [dragging, setDragging] = useState<string | null>(null);
@@ -210,6 +425,25 @@ export function HeroScene() {
       className="life-graph"
       aria-label="An interactive graph of Tshally’s life and work"
     >
+      <div className="graph-views" aria-label="Explore graph views">
+        {[
+          { id: "world", label: "My world" },
+          { id: "toolkit", label: "Toolkit" },
+          { id: "projects", label: "Projects" },
+        ].map((group) => (
+          <button
+            key={group.id}
+            type="button"
+            aria-pressed={view === group.id}
+            onClick={() => {
+              setView(group.id);
+              setSelected("tshally");
+            }}
+          >
+            {group.label}
+          </button>
+        ))}
+      </div>
       <div className="graph-map" ref={map}>
         <svg
           className="graph-edges"
@@ -233,7 +467,7 @@ export function HeroScene() {
             />
           ))}
         </svg>
-        {nodes.map((node) => {
+        {visibleNodes.map((node) => {
           const external = node.href?.startsWith("https:");
           const shared = {
             className: `graph-node ${node.kind} ${selected === node.id ? "is-selected" : ""} ${neighbours.has(node.id) ? "is-neighbour" : ""} ${dragging === node.id ? "is-dragging" : ""}`,
