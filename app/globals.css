@@ -2450,3 +2450,22 @@ html[data-motion="on"] .webgl-host {
     font-size: 9px;
   }
 }
+
+/* Metadata must not intercept graph controls at shorter viewport heights. */
+.hero-top {
+  pointer-events: none;
+}
+.graph-edges {
+  pointer-events: none;
+}
+@media (min-width: 701px) {
+  .hero .hero-art {
+    top: max(180px, 16%);
+    height: 60%;
+  }
+}
+@media (min-width: 701px) and (max-width: 1000px) {
+  .hero .hero-art {
+    height: 55%;
+  }
+}
