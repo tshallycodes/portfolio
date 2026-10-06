@@ -1,203 +1,316 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
+import { motion } from "motion/react";
 import { useMotion } from "./motion";
+
+const nodes = [
+  {
+    id: "tshally",
+    label: "Tshally",
+    kind: "core",
+    x: 50,
+    y: 48,
+    detail:
+      "Chukwuebuka Stephen Tshally-Okeke. Curiosity is the connection between it all.",
+  },
+  {
+    id: "curiosity",
+    label: "Curiosity",
+    kind: "story",
+    x: 22,
+    y: 18,
+    detail:
+      "It began with the fascination of a computer responding to a question.",
+    href: "#about",
+  },
+  {
+    id: "nigeria",
+    label: "Nigeria",
+    kind: "story",
+    x: 12,
+    y: 40,
+    detail: "Where my curiosity about computers began.",
+    href: "#about",
+  },
+  {
+    id: "bradford",
+    label: "Bradford",
+    kind: "story",
+    x: 53,
+    y: 12,
+    detail:
+      "BSc (Hons) Applied AI at the University of Bradford. Graduating July 2027.",
+    href: "#about",
+  },
+  {
+    id: "ai",
+    label: "Applied AI",
+    kind: "skill",
+    x: 83,
+    y: 25,
+    detail:
+      "Learning how data becomes a prediction, and a model becomes an application.",
+    href: "#work",
+  },
+  {
+    id: "agents",
+    label: "AI agents",
+    kind: "skill",
+    x: 87,
+    y: 50,
+    detail:
+      "Connecting language models with tools, repository context and web search.",
+    href: "#explore",
+  },
+  {
+    id: "python",
+    label: "Python",
+    kind: "skill",
+    x: 78,
+    y: 78,
+    detail:
+      "A tool for exploring data, evaluating models and building AI workflows.",
+    href: "#approach",
+  },
+  {
+    id: "projects",
+    label: "Projects",
+    kind: "work",
+    x: 48,
+    y: 89,
+    detail: "Public projects in AI, machine learning and data systems.",
+    href: "#work",
+  },
+  {
+    id: "github",
+    label: "GitHub",
+    kind: "link",
+    x: 18,
+    y: 80,
+    detail: "Explore the public repositories behind the portfolio.",
+    href: "https://github.com/tshallycodes",
+  },
+  {
+    id: "linkedin",
+    label: "LinkedIn",
+    kind: "link",
+    x: 12,
+    y: 61,
+    detail: "Find my professional profile and connect with me.",
+    href: "https://www.linkedin.com/in/cstshally-okeke/",
+  },
+  {
+    id: "oldham",
+    label: "Oldham",
+    kind: "story",
+    x: 46,
+    y: 71,
+    detail: "My base in the United Kingdom, while studying at Bradford.",
+    href: "#about",
+  },
+];
+const edges = nodes
+  .slice(1)
+  .map((node) => ["tshally", node.id])
+  .concat([
+    ["nigeria", "curiosity"],
+    ["curiosity", "bradford"],
+    ["bradford", "ai"],
+    ["ai", "agents"],
+    ["agents", "python"],
+    ["python", "projects"],
+    ["projects", "github"],
+    ["linkedin", "github"],
+    ["oldham", "bradford"],
+  ]);
+const initialPositions = Object.fromEntries(
+  nodes.map((node) => [node.id, { x: node.x, y: node.y }]),
+);
+
 export function HeroScene() {
-  const host = useRef<HTMLDivElement>(null);
-  const { motion } = useMotion();
-  const [ready, setReady] = useState(false);
-  useEffect(() => {
-    const mount = host.current;
-    if (!mount) return;
-    let disposed = false;
-    let cleanup = () => {};
-    import("three")
-      .then((THREE) => {
-        if (disposed) return;
-        let renderer: InstanceType<typeof THREE.WebGLRenderer>;
-        try {
-          renderer = new THREE.WebGLRenderer({
-            antialias: true,
-            alpha: true,
-            powerPreference: "low-power",
-          });
-        } catch {
-          return;
-        }
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(34, 1, 0.1, 100);
-        camera.position.set(0, 0, 8.5);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-        renderer.setClearColor(0x000000, 0);
-        renderer.outputColorSpace = THREE.SRGBColorSpace;
-        renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        renderer.toneMappingExposure = 1.35;
-        mount.appendChild(renderer.domElement);
-        renderer.domElement.setAttribute("aria-hidden", "true");
-        const object = new THREE.Group();
-        scene.add(object);
-        const geometry = new THREE.TorusKnotGeometry(1.16, 0.4, 160, 28, 2, 3);
-        const material = new THREE.MeshPhysicalMaterial({
-          color: 0xff790b,
-          metalness: 0.52,
-          roughness: 0.22,
-          clearcoat: 1,
-          clearcoatRoughness: 0.12,
-        });
-        object.add(new THREE.Mesh(geometry, material));
-        const wireGeometry = new THREE.IcosahedronGeometry(2.16, 1);
-        const wireMaterial = new THREE.MeshBasicMaterial({
-          color: 0xc6530c,
-          wireframe: true,
-          transparent: true,
-          opacity: 0.13,
-        });
-        const wire = new THREE.Mesh(wireGeometry, wireMaterial);
-        object.add(wire);
-        const ringGeometry = new THREE.TorusGeometry(2.4, 0.008, 8, 100);
-        const ringMaterial = new THREE.MeshBasicMaterial({
-          color: 0xe98840,
-          transparent: true,
-          opacity: 0.35,
-        });
-        const ring = new THREE.Mesh(ringGeometry, ringMaterial);
-        ring.rotation.x = 1.2;
-        object.add(ring);
-        const positions = new Float32Array(90 * 3);
-        for (let i = 0; i < 90; i++) {
-          const theta = i * 2.399;
-          const r = 2.6 + (i % 7) * 0.065;
-          positions[i * 3] = Math.cos(theta) * r;
-          positions[i * 3 + 1] = Math.sin(theta) * r;
-          positions[i * 3 + 2] = Math.sin(i * 0.9) * 0.7;
-        }
-        const pointGeometry = new THREE.BufferGeometry();
-        pointGeometry.setAttribute(
-          "position",
-          new THREE.BufferAttribute(positions, 3),
-        );
-        const pointMaterial = new THREE.PointsMaterial({
-          color: 0xd36d24,
-          size: 0.022,
-          transparent: true,
-          opacity: 0.55,
-        });
-        const points = new THREE.Points(pointGeometry, pointMaterial);
-        scene.add(points);
-        scene.add(new THREE.HemisphereLight(0xffead3, 0xa43c05, 3));
-        const key = new THREE.DirectionalLight(0xffffff, 6);
-        key.position.set(-3, 4, 5);
-        scene.add(key);
-        const fill = new THREE.DirectionalLight(0xffc38a, 4);
-        fill.position.set(4, -2, 2);
-        scene.add(fill);
-        const rim = new THREE.DirectionalLight(0xffffff, 5);
-        rim.position.set(2, 3, -4);
-        scene.add(rim);
-        let pointerX = 0,
-          pointerY = 0,
-          frame = 0,
-          active = true,
-          visible = true;
-        const resize = () => {
-          camera.aspect = mount.clientWidth / Math.max(mount.clientHeight, 1);
-          camera.updateProjectionMatrix();
-          renderer.setSize(mount.clientWidth, mount.clientHeight);
-          renderer.render(scene, camera);
-        };
-        const ro = new ResizeObserver(resize);
-        ro.observe(mount);
-        resize();
-        const move = (e: PointerEvent) => {
-          if (!motion || e.pointerType === "touch") return;
-          const box = mount.getBoundingClientRect();
-          pointerX = ((e.clientX - box.left) / box.width - 0.5) * 1.5;
-          pointerY = ((e.clientY - box.top) / box.height - 0.5) * 1.1;
-        };
-        mount.addEventListener("pointermove", move, { passive: true });
-        const reset = () => {
-          pointerX = 0;
-          pointerY = 0;
-        };
-        mount.addEventListener("pointerleave", reset);
-        const onVisibility = () => {
-          visible = !document.hidden;
-        };
-        document.addEventListener("visibilitychange", onVisibility);
-        const observer = new IntersectionObserver(([entry]) => {
-          active = entry.isIntersecting;
-        });
-        observer.observe(mount);
-        object.rotation.set(0.3, -0.3, -0.24);
-        setReady(true);
-        const render = (time: number) => {
-          if (disposed) return;
-          if (active && visible && motion) {
-            object.rotation.y +=
-              (pointerX + time * 0.000075 - object.rotation.y) * 0.075;
-            object.rotation.x += (0.3 + pointerY - object.rotation.x) * 0.035;
-            object.position.x += (pointerX * 0.8 - object.position.x) * 0.075;
-            object.position.y +=
-              (-pointerY * 0.75 +
-                Math.sin(time * 0.0006) * 0.09 -
-                object.position.y) *
-              0.075;
-            object.rotation.z +=
-              (-0.24 - pointerX * 0.2 - object.rotation.z) * 0.06;
-            wire.rotation.y = -time * 0.00009;
-            ring.rotation.z = time * 0.00012;
-            points.rotation.z = time * 0.000025;
-            renderer.render(scene, camera);
-          }
-          frame = requestAnimationFrame(render);
-        };
-        if (motion) frame = requestAnimationFrame(render);
-        else renderer.render(scene, camera);
-        cleanup = () => {
-          cancelAnimationFrame(frame);
-          ro.disconnect();
-          observer.disconnect();
-          mount.removeEventListener("pointermove", move);
-          mount.removeEventListener("pointerleave", reset);
-          document.removeEventListener("visibilitychange", onVisibility);
-          geometry.dispose();
-          material.dispose();
-          wireGeometry.dispose();
-          wireMaterial.dispose();
-          ringGeometry.dispose();
-          ringMaterial.dispose();
-          pointGeometry.dispose();
-          pointMaterial.dispose();
-          renderer.dispose();
-          renderer.domElement.remove();
-        };
-      })
-      .catch(() => {});
-    return () => {
-      disposed = true;
-      cleanup();
+  const { motion: enabled } = useMotion();
+  const [positions, setPositions] = useState(initialPositions);
+  const [selected, setSelected] = useState("tshally");
+  const [dragging, setDragging] = useState<string | null>(null);
+  const map = useRef<HTMLDivElement>(null);
+  const drag = useRef<{
+    id: string;
+    pointer: number;
+    x: number;
+    y: number;
+    startX: number;
+    startY: number;
+    width: number;
+    height: number;
+    moved: boolean;
+  } | null>(null);
+  const suppressClick = useRef(false);
+  const current = nodes.find((node) => node.id === selected)!;
+  const neighbours = new Set(
+    edges.filter((edge) => edge.includes(selected)).flat(),
+  );
+  const clamp = (value: number) => Math.min(89, Math.max(11, value));
+  function start(event: React.PointerEvent<HTMLElement>, id: string) {
+    if (event.button !== 0 || !map.current) return;
+    const box = map.current.getBoundingClientRect();
+    suppressClick.current = false;
+    drag.current = {
+      id,
+      pointer: event.pointerId,
+      x: positions[id].x,
+      y: positions[id].y,
+      startX: event.clientX,
+      startY: event.clientY,
+      width: box.width,
+      height: box.height,
+      moved: false,
     };
-  }, [motion]);
+    event.currentTarget.setPointerCapture(event.pointerId);
+    setSelected(id);
+  }
+  function move(event: React.PointerEvent<HTMLElement>) {
+    const state = drag.current;
+    if (!state || state.pointer !== event.pointerId) return;
+    const dx = event.clientX - state.startX,
+      dy = event.clientY - state.startY;
+    if (!state.moved && Math.hypot(dx, dy) < 5) return;
+    state.moved = true;
+    setDragging(state.id);
+    setPositions((previous) => ({
+      ...previous,
+      [state.id]: {
+        x: clamp(state.x + (dx / state.width) * 100),
+        y: clamp(state.y + (dy / state.height) * 100),
+      },
+    }));
+  }
+  function end(event: React.PointerEvent<HTMLElement>) {
+    if (drag.current?.pointer !== event.pointerId) return;
+    suppressClick.current = drag.current.moved;
+    drag.current = null;
+    setDragging(null);
+  }
+  function keyboard(event: React.KeyboardEvent<HTMLElement>, id: string) {
+    if (
+      !event.altKey ||
+      !["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.key)
+    )
+      return;
+    event.preventDefault();
+    const dx =
+      event.key === "ArrowLeft" ? -3 : event.key === "ArrowRight" ? 3 : 0;
+    const dy = event.key === "ArrowUp" ? -3 : event.key === "ArrowDown" ? 3 : 0;
+    setPositions((previous) => ({
+      ...previous,
+      [id]: { x: clamp(previous[id].x + dx), y: clamp(previous[id].y + dy) },
+    }));
+  }
   return (
-    <div className="signal-scene">
-      <div
-        ref={host}
-        className="webgl-host"
-        aria-label="An abstract orange 3D knot representing connected ideas"
-        role="img"
-      />
-      <div
-        className={ready ? "signal-fallback is-hidden" : "signal-fallback"}
-        aria-hidden="true"
-      >
-        <div />
-        <div />
-        <div />
+    <div
+      className="life-graph"
+      aria-label="An interactive graph of Tshally’s life and work"
+    >
+      <div className="graph-map" ref={map}>
+        <svg
+          className="graph-edges"
+          viewBox="0 0 1000 700"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          {edges.map(([from, to]) => (
+            <line
+              key={`${from}-${to}`}
+              x1={positions[from].x * 10}
+              y1={positions[from].y * 7}
+              x2={positions[to].x * 10}
+              y2={positions[to].y * 7}
+              className={
+                selected === "tshally" || [from, to].includes(selected)
+                  ? "graph-edge is-connected"
+                  : "graph-edge"
+              }
+              vectorEffect="non-scaling-stroke"
+            />
+          ))}
+        </svg>
+        {nodes.map((node) => {
+          const external = node.href?.startsWith("https:");
+          const shared = {
+            className: `graph-node ${node.kind} ${selected === node.id ? "is-selected" : ""} ${neighbours.has(node.id) ? "is-neighbour" : ""} ${dragging === node.id ? "is-dragging" : ""}`,
+            onPointerDown: (event: React.PointerEvent<HTMLElement>) =>
+              start(event, node.id),
+            onPointerMove: move,
+            onPointerUp: end,
+            onPointerCancel: end,
+            onMouseEnter: () => {
+              if (!drag.current) setSelected(node.id);
+            },
+            onFocus: () => setSelected(node.id),
+            onKeyDown: (event: React.KeyboardEvent<HTMLElement>) =>
+              keyboard(event, node.id),
+            onClick: (event: React.MouseEvent<HTMLElement>) => {
+              if (suppressClick.current) {
+                event.preventDefault();
+                suppressClick.current = false;
+              } else setSelected(node.id);
+            },
+            "aria-describedby": "graph-help",
+          };
+          return (
+            <motion.div
+              className="graph-node-position"
+              key={node.id}
+              style={{
+                left: `${positions[node.id].x}%`,
+                top: `${positions[node.id].y}%`,
+              }}
+              whileHover={enabled && !dragging ? { scale: 1.06 } : undefined}
+              transition={{ type: "spring", stiffness: 350, damping: 25 }}
+            >
+              {node.href ? (
+                <a
+                  {...shared}
+                  href={node.href}
+                  target={external ? "_blank" : undefined}
+                  rel={external ? "noopener noreferrer" : undefined}
+                >
+                  <span className="graph-node-dot" aria-hidden="true" />
+                  <span>{node.label}</span>
+                  {external && (
+                    <span className="graph-external" aria-hidden="true">
+                      ↗
+                    </span>
+                  )}
+                </a>
+              ) : (
+                <button {...shared} type="button">
+                  <span className="graph-core-mark" aria-hidden="true">
+                    ✳
+                  </span>
+                  <strong>{node.label}</strong>
+                  <span className="graph-core-sub">Applied AI student</span>
+                </button>
+              )}
+            </motion.div>
+          );
+        })}
       </div>
-      <div className="scene-caption">
-        <span>Ideas are better connected.</span>
-        <span>
-          {motion ? "Hover and move to play" : "A moment of stillness"}
-        </span>
+      <div className="graph-caption">
+        <p className="graph-description" aria-live="polite">
+          {current.detail}
+        </p>
+        <div>
+          <span id="graph-help">Drag nodes · Alt + arrows with keyboard</span>
+          <button
+            type="button"
+            onClick={() => {
+              setPositions(initialPositions);
+              setSelected("tshally");
+            }}
+          >
+            Reset graph <span aria-hidden="true">↺</span>
+          </button>
+        </div>
       </div>
     </div>
   );

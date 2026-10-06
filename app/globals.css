@@ -2171,3 +2171,244 @@ html[data-motion="on"] .webgl-host {
     height: 65px;
   }
 }
+
+/* The hero is now a personal knowledge graph, with real links. */
+.hero .hero-art {
+  width: 50%;
+  right: 2%;
+  top: 16%;
+  height: 62%;
+}
+.hero .hero-headline {
+  width: 53%;
+  bottom: 25%;
+}
+.hero h1 {
+  font-size: clamp(70px, 8.8vw, 140px);
+}
+.life-graph {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 14px;
+}
+.graph-map {
+  position: relative;
+  min-height: 0;
+}
+.graph-edges {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.graph-edge {
+  stroke: #d7a17c;
+  stroke-width: 1;
+  opacity: 0.25;
+  transition:
+    opacity 0.2s,
+    stroke 0.2s;
+}
+.graph-edge.is-connected {
+  opacity: 0.75;
+  stroke: #df752b;
+}
+.graph-node-position {
+  position: absolute;
+  translate: -50% -50%;
+  z-index: 2;
+}
+.graph-node {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 12px 16px;
+  border: 1px solid #e7bfa2;
+  background: #fffaf6f5;
+  border-radius: 40px;
+  color: #9a440f;
+  font-size: 12px;
+  white-space: nowrap;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  box-shadow: 0 5px 20px #8c3d0b08;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+.graph-node-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #d87834;
+  flex-shrink: 0;
+}
+.graph-node.skill .graph-node-dot {
+  border-radius: 1px;
+  rotate: 45deg;
+}
+.graph-node.link {
+  border-color: #d9905c;
+  font-weight: 600;
+}
+.graph-external {
+  font-size: 14px;
+}
+.graph-node.is-selected {
+  border-color: #af4108;
+  background: #fff5eb;
+  box-shadow: 0 0 0 4px #df752b12;
+}
+.graph-node.is-dragging {
+  cursor: grabbing;
+  box-shadow: 0 10px 30px #8c3d0b20;
+}
+.graph-node.core {
+  flex-direction: column;
+  gap: 5px;
+  width: 126px;
+  height: 126px;
+  padding: 16px;
+  border-radius: 50%;
+  background: #af4108;
+  border-color: #af4108;
+  color: #fffaf6;
+  box-shadow:
+    0 0 0 14px #efbc941c,
+    0 0 0 30px #efbc9412;
+}
+.graph-core-mark {
+  font-size: 27px;
+  line-height: 1;
+}
+.graph-node.core strong {
+  font-family: var(--display);
+  font-size: 25px;
+  letter-spacing: -1px;
+  font-weight: 500;
+}
+.graph-core-sub {
+  font-size: 8px;
+}
+.graph-caption {
+  padding: 0 6%;
+  color: var(--muted);
+}
+.graph-description {
+  min-height: 42px;
+  max-width: 450px;
+  font-size: 11px;
+  line-height: 1.6;
+}
+.graph-caption > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+  font-size: 9px;
+}
+.graph-caption button {
+  background: transparent;
+  border: 0;
+  color: var(--accent);
+  font-size: 10px;
+  padding: 8px 0;
+  white-space: nowrap;
+}
+.graph-caption button span {
+  margin-left: 7px;
+}
+@media (min-width: 701px) and (max-width: 1000px) {
+  .hero .hero-art {
+    width: 53%;
+    right: 0;
+    height: 57%;
+    top: 19%;
+  }
+  .hero h1 {
+    font-size: 9vw;
+  }
+  .graph-node {
+    font-size: 10px;
+    padding: 10px 12px;
+    gap: 6px;
+  }
+  .graph-node.core {
+    width: 100px;
+    height: 100px;
+  }
+  .graph-node.core strong {
+    font-size: 22px;
+  }
+  .graph-caption {
+    padding: 0 8%;
+  }
+}
+@media (max-width: 700px) {
+  .hero {
+    min-height: 900px;
+  }
+  .hero .hero-art {
+    width: 94%;
+    right: 3%;
+    top: 19%;
+    height: 43%;
+  }
+  .hero .hero-headline {
+    width: 88%;
+    bottom: 23%;
+  }
+  .hero h1 {
+    font-size: 13vw;
+  }
+  .life-graph {
+    gap: 8px;
+  }
+  .graph-node {
+    font-size: 10px;
+    gap: 5px;
+    padding: 9px 10px;
+  }
+  .graph-node-dot {
+    width: 4px;
+    height: 4px;
+  }
+  .graph-node.core {
+    width: 91px;
+    height: 91px;
+    padding: 10px;
+    box-shadow:
+      0 0 0 9px #efbc941c,
+      0 0 0 19px #efbc9412;
+  }
+  .graph-core-mark {
+    font-size: 20px;
+  }
+  .graph-node.core strong {
+    font-size: 22px;
+  }
+  .graph-core-sub {
+    font-size: 7px;
+  }
+  .graph-caption {
+    padding: 0 6%;
+  }
+  .graph-description {
+    min-height: 36px;
+    font-size: 9px;
+  }
+  .graph-caption > div {
+    margin-top: 3px;
+    font-size: 8px;
+  }
+  .graph-caption button {
+    font-size: 9px;
+  }
+}
